@@ -1674,12 +1674,13 @@ async function showSwitchResourceModal() {
         const isCurrentSource = String(sourceKey) === String(currentSourceCode) && String(result.vod_id) === String(currentVideoId);
         const sourceName = resourceOptions.find(opt => opt.key === sourceKey)?.name || '未知资源';
         const speedResult = speedResults[sourceKey] || { speed: -1, error: '未测试' };
+        const vodPic = result.vod_pic && /^https?:\/\//i.test(result.vod_pic) ? ('/img-proxy/' + encodeURIComponent(result.vod_pic)) : (result.vod_pic || 'image/nomedia.png');
         
         html += `
             <div class="relative group ${isCurrentSource ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer hover:scale-105 transition-transform'}" 
                  ${!isCurrentSource ? `onclick="switchToResource('${sourceKey}', '${result.vod_id}')"` : ''}>
                 <div class="aspect-[2/3] rounded-lg overflow-hidden bg-gray-800 relative">
-                    <img src="${result.vod_pic}" 
+                    <img src="${vodPic}" 
                          alt="${result.vod_name}"
                          class="w-full h-full object-cover"
                          referrerpolicy="no-referrer"

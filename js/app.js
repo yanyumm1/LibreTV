@@ -744,8 +744,9 @@ async function search() {
                 `data-api-url="${item.api_url.replace(/"/g, '&quot;')}"` : '';
 
             // 修改为水平卡片布局，图片在左侧，文本在右侧，并优化样式
-            // 图片用原始URL + no-referrer（绕过防盗链），失败兜底站内图
+            // 图片统一走免鉴权图片代理 /img-proxy/（绕过防盗链，无需密码）
             const hasCover = item.vod_pic && item.vod_pic.startsWith('http');
+            const coverSrc = hasCover ? ('/img-proxy/' + encodeURIComponent(item.vod_pic)) : '';
 
             return `
                 <div class="card-hover bg-[#111] rounded-lg overflow-hidden cursor-pointer transition-all hover:scale-[1.02] h-full shadow-sm hover:shadow-md" 
@@ -753,7 +754,7 @@ async function search() {
                     <div class="flex h-full">
                         ${hasCover ? `
                         <div class="relative flex-shrink-0 search-card-img-container">
-                            <img src="${item.vod_pic}" alt="${safeName}" 
+                            <img src="${coverSrc}" alt="${safeName}" 
                                  class="h-full w-full object-cover transition-transform hover:scale-110" 
                                  referrerpolicy="no-referrer"
                                  onerror="this.onerror=null; this.src='image/nomedia.png'; this.classList.add('object-contain');" 

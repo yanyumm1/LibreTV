@@ -529,15 +529,13 @@ async function renderDoubanCards(data, container) {
                 .replace(/>/g, '&gt;');
             
             // 处理图片URL
-            // 1. 直接使用豆瓣图片URL (添加no-referrer属性)
+            // 免鉴权图片代理：所有封面图统一走 /img-proxy/（无需密码，自动带 Referer 反防盗链）
             const originalCoverUrl = item.cover;
             
-            // 2. 主图优先使用带鉴权的代理URL（绕过豆瓣图床防盗链）
+            // 统一走免鉴权图片代理（不依赖 PASSWORD/auth）
             let coverUrl = originalCoverUrl;
-            try {
-                coverUrl = await window.ProxyAuth.addAuthToProxyUrl(PROXY_URL + encodeURIComponent(originalCoverUrl));
-            } catch (e) {
-                console.error('添加代理鉴权失败，使用原始URL:', e);
+            if (originalCoverUrl && /^https?:\/\//i.test(originalCoverUrl)) {
+                coverUrl = '/img-proxy/' + encodeURIComponent(originalCoverUrl);
             }
             
             // 为不同设备优化卡片布局
