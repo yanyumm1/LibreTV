@@ -744,6 +744,7 @@ async function search() {
                 `data-api-url="${item.api_url.replace(/"/g, '&quot;')}"` : '';
 
             // 修改为水平卡片布局，图片在左侧，文本在右侧，并优化样式
+            // 图片用原始URL + no-referrer（绕过防盗链），失败兜底站内图
             const hasCover = item.vod_pic && item.vod_pic.startsWith('http');
 
             return `
@@ -754,7 +755,8 @@ async function search() {
                         <div class="relative flex-shrink-0 search-card-img-container">
                             <img src="${item.vod_pic}" alt="${safeName}" 
                                  class="h-full w-full object-cover transition-transform hover:scale-110" 
-                                 onerror="this.onerror=null; this.src='https://via.placeholder.com/300x450?text=无封面'; this.classList.add('object-contain');" 
+                                 referrerpolicy="no-referrer"
+                                 onerror="this.onerror=null; this.src='image/nomedia.png'; this.classList.add('object-contain');" 
                                  loading="lazy">
                             <div class="absolute inset-0 bg-gradient-to-r from-black/30 to-transparent"></div>
                         </div>` : ''}
