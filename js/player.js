@@ -349,6 +349,15 @@ function handleKeyboardShortcuts(e) {
         }
     }
 
+    // Enter 键 = 切换全屏
+    if (e.key === 'Enter') {
+        if (art) {
+            art.fullscreen = !art.fullscreen;
+            showShortcutHint('切换全屏', 'fullscreen');
+            e.preventDefault();
+        }
+    }
+
     // f 键 = 切换全屏
     if (e.key === 'f' || e.key === 'F') {
         if (art) {
